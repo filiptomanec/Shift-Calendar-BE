@@ -1,0 +1,47 @@
+package com.filiptomanec.shiftcalendarbe.user;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class UserService {
+
+	private final UserRepository userRepository;
+
+	public User createUser(UserCreateRequest userCreateRequest) {
+		User user = new User();
+		user.setUsername(userCreateRequest.getUsername());
+		user.setEmail(userCreateRequest.getEmail());
+		user.setPassword(userCreateRequest.getPassword());
+		return this.userRepository.save(user);
+	}
+
+	public List<User> findAllUsers() {
+		return this.userRepository.findAll();
+	}
+
+	public User get(Integer id) {
+		return this.userRepository.findById(id).orElse(null);
+	}
+
+	public User getByUsername(String username) {
+		return this.userRepository.findByUsername(username).orElse(null);
+	}
+
+	public User updateUser(Integer id, UserUpdateRequest userUpdateRequest) {
+		User user = get(id);
+		user.setUsername(userUpdateRequest.getUsername());
+		user.setEmail(userUpdateRequest.getEmail());
+		user.setPassword(userUpdateRequest.getPassword());
+		return this.userRepository.save(user);
+	}
+
+	public void removeUser(Integer id) {
+		this.userRepository.deleteById(id);
+	}
+}

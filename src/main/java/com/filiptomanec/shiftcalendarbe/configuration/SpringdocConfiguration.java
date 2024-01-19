@@ -27,7 +27,8 @@ public class SpringdocConfiguration {
 								            .type(SecurityScheme.Type.APIKEY)
 								            .description("Bearer token access")
 								            .in(SecurityScheme.In.HEADER)
-								            .name("Authorization")))
+								            .name("Authorization")
+								            .scheme("bearer")))
 				.addSecurityItem(new SecurityRequirement()
 						                 .addList(securitySchemeName));
 	}

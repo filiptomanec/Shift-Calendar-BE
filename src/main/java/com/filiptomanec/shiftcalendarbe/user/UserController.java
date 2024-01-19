@@ -1,5 +1,6 @@
 package com.filiptomanec.shiftcalendarbe.user;
 
+import com.filiptomanec.shiftcalendarbe.token.TokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,18 +23,27 @@ public class UserController {
 
 	private final UserService userService;
 
-	@PostMapping
-	@Operation(summary = "Creates new user.")
-	public ResponseEntity<User> createUser(@RequestBody UserCreateRequest userCreateRequest) {
-		User user = userService.createUser(userCreateRequest);
-		return ResponseEntity.ok(user);
-	}
-
 	@GetMapping
 	@Operation(summary = "Returns all users.")
-	public ResponseEntity<List<User>> getAllUsers() {
+	public ResponseEntity<List<UserResponse>> getAllUsers() {
 		List<User> users = userService.findAllUsers();
-		return ResponseEntity.ok(users);
+		List<UserResponse> userResponses = users.stream().map(user -> {
+			UserResponse userResponse = new UserResponse();
+			userResponse.setId(user.getId());
+			userResponse.setUsername(user.getUserName());
+			userResponse.setEmail(user.getEmail());
+			userResponse.setTokens(user.getTokens().stream().map(token -> {
+				TokenResponse tokenResponse = new TokenResponse();
+				tokenResponse.setId(token.getId());
+				tokenResponse.setToken(token.getToken());
+				tokenResponse.setRevoked(token.isRevoked());
+				tokenResponse.setExpired(token.isExpired());
+				tokenResponse.setUserId(token.getUser().getId());
+				return tokenResponse;
+			}).toList());
+			return userResponse;
+		}).toList();
+		return ResponseEntity.ok(userResponses);
 	}
 
 	@GetMapping("/{id}")

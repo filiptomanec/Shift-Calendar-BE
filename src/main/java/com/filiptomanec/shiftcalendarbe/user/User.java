@@ -1,5 +1,6 @@
 package com.filiptomanec.shiftcalendarbe.user;
 
+import com.filiptomanec.shiftcalendarbe.calendar.Calendar;
 import com.filiptomanec.shiftcalendarbe.token.Token;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +38,9 @@ public class User implements UserDetails {
 
 	@OneToMany(mappedBy = "user")
 	private List<Token> tokens;
+
+	@OneToMany(mappedBy = "user")
+	private List<Calendar> calendars;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -11,8 +11,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 @Entity
@@ -27,9 +27,9 @@ public class ShiftRecord {
 
 	private LocalDate date;
 
-	private Time startAt;
+	private LocalTime startAt;
 
-	private Time endAt;
+	private LocalTime endAt;
 
 	@ManyToOne
 	@JoinColumn(name = "calendar")

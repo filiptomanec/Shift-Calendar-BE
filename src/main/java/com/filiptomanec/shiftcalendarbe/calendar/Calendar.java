@@ -27,7 +27,7 @@ public class Calendar {
 	private String name;
 
 	@ManyToOne
-	@JoinColumn(name = "user")
+	@JoinColumn(name = "\"user\"")
 	private User user;
 
 	@OneToMany(mappedBy = "calendar", orphanRemoval = true)
